@@ -3,10 +3,10 @@
 #include "stdafx.h"
 using namespace prj_3d::HelloWinHlsl;
 using namespace prj_3d::HelloWinHlsl::ClientTy;
-using CurDxVer = DxVer::v9;
+//using CurDxVer = DxVer::v9;
 //using CurDxVer = DxVer::v10;
 //using CurDxVer = DxVer::v11;
-//using CurDxVer = DxVer::v12;
+using CurDxVer = DxVer::v12;
 
 template<class T> class jarble; // primary template
 
@@ -242,9 +242,9 @@ template<> class jarble<DxVer::v12> : public CurClientApp<DxVer::v12> { using T 
 	D3D_PRIMITIVE_TOPOLOGY m_enuPrimTopology;
 
 	struct PS_CONST_BUFF { 
-		DirectX::XMFLOAT2 iResolution;
 		float iTime;
-		DirectX::XMUINT2 iMouse;
+		DirectX::XMFLOAT2 iResolution;
+		//DirectX::XMFLOAT2 iMouse;
 	};
 	CPtr< ID3D12RootSignature > m_pcRootSignature;
 	Dx::Tool::ConstantBuf::viaStruct::Accessor< T, PS_CONST_BUFF >::uptr_t m_puoConstBufAccessor;
@@ -311,14 +311,15 @@ template<> class jarble<DxVer::v12> : public CurClientApp<DxVer::v12> { using T 
         crpsoDynamic ->m_pcCommandList ->IASetPrimitiveTopology( m_enuPrimTopology );
 
 		m_puoConstBufAccessor ->passToShader(
-				crpsoDynamic ->m_pcCommandList
+				crpsoDynamic ->m_uFrameIndex
 				, [this, &crpsoDynamic](PS_CONST_BUFF *p) { 
 					p ->iTime = m_oTimer.get( );
-					POINT stPoint;
-					if ( !LikeDxut::Mouse::getPos( crpsoDynamic ->m_hWnd, &stPoint ) )
-						return;
-					p ->iMouse.x = stPoint.x;
-					p ->iMouse.y = stPoint.y;
+					// TODO(alex): repairme
+					//POINT stPoint;
+					//if ( !LikeDxut::Mouse::getPos( crpsoDynamic ->m_hWnd, &stPoint ) )
+					//	return;
+					//p ->iMouse.x = stPoint.x;
+					//p ->iMouse.y = stPoint.y;
 				}
 			);
 

@@ -1,16 +1,16 @@
 // pixel shader
-cbuffer PerFrameConstants : register (b0) { float2 iResolution; }
-cbuffer PerFrameConstants : register (b1) { float iTime; }
-cbuffer PerFrameConstants : register (b2) { uint2 iMouse; }
-
+cbuffer ConstantBuffer : register(b0) {
+	float iTime;
+	float2 iResolution;
+};
 #define DRAG_MULT 0.048
 #define ITERATIONS_RAYMARCH 13
 // If set 1, then arti is visible. Original is 48
 #define ITERATIONS_NORMAL 48
 
-#define Mouse (iMouse.xy / iResolution.xy) // OLD
+//#define Mouse (iMouse.xy / iResolution.xy) // orig
 //static const float2 Mouse = float2( 1.7,0.5 ); // more artif, invisible light source
-//static const float2 Mouse = float2( 1.55, 0.55 ); // less artif, visible light source
+static const float2 Mouse = float2( 1.55, 0.55 ); // less artif, visible light source
 
 // NEW
 float oct(float p){
@@ -177,7 +177,7 @@ float3 getRay(float2 uv){
 	float3 proj = normalize(float3(uv.x, uv.y, 1.0) + float3(uv.x, uv.y, -1.0) * pow(length(uv), 2.0) * 0.05);	
     if(iResolution.x < 400.0) 
 		return proj;
-	//float3 ray = rotmat(float3(0.0, -1.0, 0.0), 3.0 * (Mouse.x * 2.0 - 1.0)) * rotmat(float3(1.0, 0.0, 0.0), 1.5 * (Mouse.y * 2.0 - 1.0)) * proj; // OLD
+	//float3 ray = rotmat(float3(0.0, -1.0, 0.0), 3.0 * (Mouse .x * 2.0 - 1.0)) * rotmat(float3(1.0, 0.0, 0.0), 1.5 * (Mouse .y * 2.0 - 1.0)) * proj; // OLD
 	float3x3 rotmat1 = 
 		rotmat(
 				float3(0.0, -1.0, 0.0), 3.0 * (Mouse.x * 2.0 - 1.0)) * rotmat(float3(1.0, 0.0, 0.0)
